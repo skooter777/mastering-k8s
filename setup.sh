@@ -338,6 +338,23 @@ start() {
     sudo kubebuilder/bin/kubectl get all -A
     sudo kubebuilder/bin/kubectl get componentstatuses || true
     sudo kubebuilder/bin/kubectl get --raw='/readyz?verbose'
+    alias k='sudo kubebuilder/bin/kubectl'
+    sudo kubebuilder/bin/kubectl patch deploy demo -p '{
+    "spec": {
+        "template": {
+        "spec": {
+            "tolerations": [
+            {
+                "key": "node.cloudprovider.kubernetes.io/uninitialized",
+                "operator": "Equal",
+                "value": "true",
+                "effect": "NoSchedule"
+            }
+            ]
+        }
+        }
+    }
+    }'
 }
 
 stop() {
