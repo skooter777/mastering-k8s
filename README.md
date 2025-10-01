@@ -281,6 +281,29 @@ sudo  kubebuilder/bin/kubectl create deploy demo --image nginx
 sudo kubebuilder/bin/kubectl get all -A
 ```
 
+## 12. Home Work
+```bash
+# For ease of use
+alias k='sudo kubebuilder/bin/kubectl'
+
+# FIX Deployment Nginx
+k patch deploy demo -p '{
+  "spec": {
+    "template": {
+      "spec": {
+        "tolerations": [
+          {
+            "key": "node.cloudprovider.kubernetes.io/uninitialized",
+            "operator": "Equal",
+            "value": "true",
+            "effect": "NoSchedule"
+          }
+        ]
+      }
+    }
+  }
+}'
+```
 ## Notes:
 - Each component runs as a background process (&)
 - The setup uses self-signed certificates for simplicity
